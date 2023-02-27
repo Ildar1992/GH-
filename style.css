@@ -1,0 +1,90 @@
+* {
+  box-sizing: border-box;
+}
+
+.app {
+  padding-top: 50px;
+  background-color: #c4c4c4;
+  margin: 0 auto;
+  min-height: 700px;
+  width: 661px;
+  margin-top: 150px;
+}
+.search-input {
+  display: block;
+  margin: 0 auto;
+  width: 250px;
+  background: white;
+  position: relative;
+  margin-bottom: 160px;
+}
+.search-input input {
+  width: 100%;
+  display: block;
+  border: none;
+  height: 40px;
+}
+
+.wrapper {
+  margin: 0 auto;
+}
+
+.autocomplete-box {
+  width: 250px;
+  margin: 0 auto;
+  padding-left: 0;
+  display: block;
+  overflow-y: auto;
+  display: none;
+  position: absolute;
+  background-color: white;
+}
+.autocomplete-box--active1 {
+  display: block;
+}
+.autocomplete-box li {
+  list-style-type: none;
+  padding: 5px;
+}
+.autocomplete-box li:hover {
+  background-color: lightgrey;
+}
+
+.card {
+  min-height: 70px;
+  width: 250px;
+  border: 2px solid black;
+  margin: 0 auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  justify-content: space-between;
+
+  align-items: center;
+  padding-right: 10px;
+  padding-left: 10px;
+  background-color: #e27beb;
+}
+.card span {
+  display: block;
+}
+
+.cross {
+  background: inherit;
+  height: 40px;
+  width: 40px;
+  cursor: pointer;
+  border: none;
+}
+.cross_span {
+  height: 2px;
+  width: 40px;
+  background-color: red;
+  display: block;
+}
+.cross_span:first-child {
+  transform: rotate(45deg) translateY(1px);
+}
+.cross_span:last-child {
+  transform: rotate(-45deg) translateY(-1px);
+}
