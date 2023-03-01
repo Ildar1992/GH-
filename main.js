@@ -1,22 +1,20 @@
-"use strict";
-
-const input = document.querySelector("input");
-const li = document.getElementsByTagName("li");
+const searchPanel = document.querySelector("input");
+const searchList = document.getElementsByTagName("li");
 const completeBox = document.querySelector(".autocomplete-box");
 const wrapper = document.querySelector(".wrapper");
 
 function debounce(fn) {
   let interval;
   return function () {
-    let callFn = () => fn.apply(this, arguments);
+    let callableFunction = () => fn.apply(this, arguments);
 
     clearTimeout(interval);
 
-    interval = setTimeout(callFn, 400);
+    interval = setTimeout(callableFunction, 400);
   };
 }
 
-input.addEventListener("keyup", debounce(main));
+searchPanel.addEventListener("input", debounce(main));
 
 async function main(e) {
   try {
@@ -31,20 +29,19 @@ async function main(e) {
 
 function getRepos(userInput) {
   return fetch(
-    `https://api.github.com/search/repositories?q=${userInput}+in:name&sort=stars`
+    `https://api.github.com/search/repositories?q=${userInput}&per_page=5`
   ).then((response) => response.json());
 }
 
 async function showRepos(repoArr) {
   try {
-    let fiveRepoArr = repoArr.items.slice(0, 5);
-    let fiveNames = fiveRepoArr.map(({ name }) => {
+    let fiveNames = repoArr.items.map(({ name }) => {
       return name;
     });
     fiveNames = fiveNames.map((name) => {
       return (name = `<li>${name}</li>`);
     });
-    let listData;
+    let listData = "Репозитория не обнаружено";
 
     if (!fiveNames.length) {
     } else {
@@ -56,31 +53,31 @@ async function showRepos(repoArr) {
     completeBox.classList.remove("autocomplete-box--active1");
   }
 
-  return repoArr.items.slice(0, 5);
+  return repoArr.items;
 }
 
 function addRepoCard(fiveRepoArr) {
-  let myliArr = Array.from(li);
-  console.log(fiveRepoArr);
-  myliArr.forEach((item) => {
+  let listArr = Array.from(searchList);
+  listArr.forEach((item) => {
     item.addEventListener("click", addCard);
   });
   async function addCard(e) {
-    input.value = "";
+    searchPanel.value = "";
     completeBox.classList.remove("autocomplete-box--active1");
     const newCard = document.createElement("div");
     newCard.classList.add("card");
+
     const name = document.createElement("span");
-    name.textContent = `Name: ${fiveRepoArr[myliArr.indexOf(e.target)].name}`;
+    name.textContent = `Name: ${fiveRepoArr[listArr.indexOf(e.target)].name}`;
 
     const owner = document.createElement("span");
     owner.textContent = `Owner: ${
-      fiveRepoArr[myliArr.indexOf(e.target)].owner.login
+      fiveRepoArr[listArr.indexOf(e.target)].owner.login
     }`;
 
     const stars = document.createElement("span");
     stars.textContent = `Stars: ${
-      fiveRepoArr[myliArr.indexOf(e.target)].stargazers_count
+      fiveRepoArr[listArr.indexOf(e.target)].stargazers_count
     }`;
 
     const cardField = document.createElement("div");
@@ -98,9 +95,11 @@ function addRepoCard(fiveRepoArr) {
     cardField.appendChild(stars);
     btn.appendChild(span);
     btn.appendChild(span.cloneNode(true));
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", function () {
+      btn.removeEventListener("click", arguments.callee);
       card.remove();
     });
+
     card.appendChild(cardField);
     card.appendChild(btn);
     wrapper.appendChild(card);
